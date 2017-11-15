@@ -1,0 +1,27 @@
+{
+  "name": "bot-facebook-messenger",
+  "version": "1.0.0",
+  "description": "Bot facebook messenger",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mariomoren00/bot-facebook-messenger.git"
+  },
+  "keywords": [
+    "bot"
+  ],
+  "author": "Mario Moreno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mariomoren00/Bot-facebook-messenger/issues"
+  },
+  "homepage": "https://github.com/mariomoren00/Bot-facebook-messenger#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "request": "^2.81.0"
+  }
+}
