@@ -6,7 +6,7 @@ const request = require('request')
 const fs = require('fs')
 
 // Declare token facebook
-const APP_TOKEN = 'EAAEi5xta9rUBAMZAoklTSPikydMZBSADVZBvVAkwP5jvhxuQwt0NMbnrGXoragec3xcCrZAMRB5OPR18vht7igKB21PZCSYZCVsk0IM0JTZCvwGAEWjZCNKCIj7D2sZChSZB1uiH3IHmcF2pmMc7g6pGYgYMZASJ34R9cm7HcUuLmp7LAZDZD';
+const APP_TOKEN = 'EAAEvc9HEf8kBAINprzZAIcK5ZBfaorZBT93rsW9FSXroRGiFPMPPSY0pCzoUZCvcF4q25Sq5WZBgYgNcAmSEfZBW151rBRZAgApmkXeHS6zefMZC4ZCCXSIDmqf43WGdp9fp2QFIx2gcQvYLI03CLCD0CmhxdeojPxlzVpc6pF5C1mn1Mo2OYRm3C';
 
 var app = express()
 
@@ -17,7 +17,7 @@ const folderPath = __dirname + '/app'
 app.use(bodyParser.json())
 
 // Declare port 
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 4000;
 
 // Mount your static paths
 // Renders your image, title, paragraph and index.html
@@ -25,7 +25,7 @@ app.use(express.static(folderPath))
 
 // Start the server.
 app.listen(PORT,function(){
-	console.log('Listening localhost:3000')
+	console.log('Listening localhost:4000')
 })
 
 // Read file index and send 
@@ -35,22 +35,25 @@ app.get('/',function(req, res){
 
 // Request with method get to webhook 
 app.get('/webhook',function(req, res){
-	if(req.query['hub.verify_token'] === 'hello_token'){
-		res.send(req.query['hub.challenge'])
-	}else{
-		res.send('Invalid token');
-	}
+	if (req.query['hub.mode'] === 'subscribe' &&
+		req.query['hub.verify_token'] === 'hello_token') {
+		console.log("Validating webhook");
+	res.status(200).send(req.query['hub.challenge']);
+	} else {
+		console.error("Failed validation. Make sure the validation tokens match.");
+	res.sendStatus(403);          
+	}  
 })
 
 // Request with method post to webhook
 app.post('/webhook',function(req, res){
 	var data = req.body
-
 	if(data.object == 'page'){
 		data.entry.forEach(function(pageEntry){
-			pageEntry.messaging.forEach(function(messagingEvent){
-				if(messagingEvent.message){					
-					getMessage(messagingEvent)
+			pageEntry.messaging.forEach(function(event){
+				if(event.message){
+					console.log("Webhook received unknown event: ", event);					
+					getMessage(event)
 				}
 			})
 		})
@@ -59,31 +62,97 @@ app.post('/webhook',function(req, res){
 })
 
 // Get text messages
-function getMessage(event){
-	var senderID = event.sender.id
-	var messageText = event.message.text
-	
+function getMessage(messagingEvent){
+	var senderID = messagingEvent.sender.id
+	var messageText = messagingEvent.message.text
 	evaluateTextMessage(senderID, messageText)
 }
 
 // Evaluate text message
 function evaluateTextMessage(senderID, messageText){
-	message = "";
+	var expr = messageText;
 
-	expr = messageText;
-
-	switch (expr) {
-	  case "Help":
-	    break;
-	  case "Information":
-	    break;
-	  case "Profile":
-	    break;
-	  default:
-	  	message = ("I cannot help you :( ");
-	}
+	var inicio = expr.lastIndexOf('=');
+	console.log('inicio', inicio);
 	
-	SendTextMessage(senderID, message);
+	//var entre = expr.lastIndexOf('+');
+	//console.log('entre', entre);
+
+	var fin = expr.length;
+	console.log('fin', fin);
+
+	//var a = expr.substring(inicio+1, entre);
+	//var b = expr.substring(entre+1, fin);
+
+	var operacion = expr.substring(0, inicio);
+	console.log('operacion:', operacion);
+
+	//console.log(a,b);
+	
+	switch (operacion) {
+		case "suma":
+			var entre = expr.lastIndexOf('+');
+			console.log('entre', entre);
+
+			var a = expr.substring(inicio+1, entre);
+			var b = expr.substring(entre+1, fin);
+			
+			console.log(a,b);
+			
+			var va = parseInt(a);
+			var vb = parseInt(b);
+			var result = va+vb;
+
+			SendTextMessage(senderID, ("Resultado de la suma es: "+ result));
+		break;
+		case "resta":
+			var entre = expr.lastIndexOf('-');
+			console.log('entre', entre);
+
+			var a = expr.substring(inicio+1, entre);
+			var b = expr.substring(entre+1, fin);
+			
+			console.log(a,b);
+			
+			var va = parseInt(a);
+			var vb = parseInt(b);
+			var result = va-vb;
+
+			SendTextMessage(senderID, ("Resultado de la resta es: "+ result));
+		break;
+		case "divicion":
+			var entre = expr.lastIndexOf('/');
+			console.log('entre', entre);
+
+			var a = expr.substring(inicio+1, entre);
+			var b = expr.substring(entre+1, fin);
+			
+			console.log(a,b);
+			
+			var va = parseInt(a);
+			var vb = parseInt(b);
+			var result = va/vb;
+
+			SendTextMessage(senderID, ("Resultado de la divición es: "+ result));
+		break;
+		case "multiplicacion":
+			var entre = expr.lastIndexOf('*');
+			console.log('entre', entre);
+
+			var a = expr.substring(inicio+1, entre);
+			var b = expr.substring(entre+1, fin);
+			
+			console.log(a,b);
+			
+			var va = parseInt(a);
+			var vb = parseInt(b);
+			var result = va*vb;
+
+			SendTextMessage(senderID, ("Resultado de la multiplicación es: "+ result));
+		break;
+		default:
+			SendTextMessage(senderID, "No puedo ayudarte con esa operación :( ");
+	}	
 }
 
 // Send text message
@@ -107,11 +176,20 @@ function callSendApi(messageData){
 		qs: {access_token: APP_TOKEN},
 		method: 'POST',
 		json: messageData
-	},function(error, response, data){
-		if(error)
-			console.log('Cannot send message');
-		else
-			console.log('Successful message');
+	},function(error, response, body){
+		if (!error && response.statusCode == 200) {
+			var recipientId = body.recipient_id;
+			var messageId = body.message_id;
+			console.log("Successfully sent generic message with id %s to recipient %s", messageId, recipientId);
+		} else {
+			console.error("Unable to send message.");
+			console.error(response);
+			console.error(error);
+		}
 	})
+}
+
+function evaluateOpetarion(expr,){
+	
 }
 
