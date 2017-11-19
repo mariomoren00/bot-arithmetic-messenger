@@ -6,7 +6,7 @@ const request = require('request')
 const fs = require('fs')
 
 // Declare token facebook
-const APP_TOKEN = 'EAAEvc9HEf8kBAINprzZAIcK5ZBfaorZBT93rsW9FSXroRGiFPMPPSY0pCzoUZCvcF4q25Sq5WZBgYgNcAmSEfZBW151rBRZAgApmkXeHS6zefMZC4ZCCXSIDmqf43WGdp9fp2QFIx2gcQvYLI03CLCD0CmhxdeojPxlzVpc6pF5C1mn1Mo2OYRm3C';
+const APP_TOKEN = 'EAAEvc9HEf8kBAD7Aw9guZA80cP2YhzRNsT4ZAOH9asaHLngQzdlFEZB8M8WgwDP1QXvfNXqcUNtzyjcQ4vMOT2fKW2a6sX5nwuBh3LZCVSZAxSZAAmPn0WAU8RaLAREAABDqToqTbMeXFSqgMYjPEHVhI58G3vqOk566C99JcKZAhB5PY99dxFg';
 
 var app = express()
 
@@ -71,6 +71,18 @@ function getMessage(messagingEvent){
 // Evaluate text message
 function evaluateTextMessage(senderID, messageText){
 	var expr = messageText;
+	
+	//convertir minusculas
+	var tocase = expr.toLowerCase();
+	console.log(tocase);
+
+	//quitar espacios entre palabras
+	//var texto = "migate no gokui";
+	//var textof = texto.replace(/\s/g,"");
+	//console.log(textof);
+
+	var cleanText = tocase.replace(/\s/g,"");
+	console.log(cleanText);
 
 	var inicio = expr.lastIndexOf('=');
 	console.log('inicio', inicio);
@@ -189,7 +201,35 @@ function callSendApi(messageData){
 	})
 }
 
-function evaluateOpetarion(expr,){
+function evaluateOpetarion(expr, signo){
 	
 }
 
+
+/**
+ * 
+ * function esMayuscula(letra)
+{
+    return letra === letra.toUpperCase();
+}
+
+function esMinuscula(letra)
+{
+    return letra === letra.toLowerCase();
+}   
+
+var miPalabra = "Suma=5+5";
+for(var index = 0; index < miPalabra.length; index++)
+{
+    var letraActual = miPalabra.charAt(index);
+    if(esMayuscula(letraActual))
+    {
+        alert("La letra " + letraActual + " es mayúscula");
+    }
+
+    if(esMinuscula(letraActual))
+    {
+        alert("La letra " + letraActual + " es minúscula");
+    }       
+}
+ */
