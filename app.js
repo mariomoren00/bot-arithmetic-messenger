@@ -76,14 +76,13 @@ function evaluateTextMessage(senderID, messageText){
 	var tocase = expr.toLowerCase();
 	console.log(tocase);
 
+	//quitar espacios en blanco
 	var cleanText = tocase.replace(/\s/g,"");
 	console.log(cleanText);
 
+	//evaluamos la operacion a realizar
 	var inicio = expr.lastIndexOf('=');
 	console.log('inicio', inicio);
-
-	var fin = expr.length;
-	console.log('fin', fin);
 
 	var operacion = expr.substring(0, inicio);
 	console.log('operacion:', operacion);
@@ -93,6 +92,9 @@ function evaluateTextMessage(senderID, messageText){
 		case "suma":
 			var entre = expr.lastIndexOf('+');
 			console.log('entre', entre);
+
+			var fin = expr.length;
+			console.log('fin', fin);
 
 			var a = expr.substring(inicio+1, entre);
 			var b = expr.substring(entre+1, fin);
@@ -109,6 +111,9 @@ function evaluateTextMessage(senderID, messageText){
 			var entre = expr.lastIndexOf('-');
 			console.log('entre', entre);
 
+			var fin = expr.length;
+			console.log('fin', fin);
+
 			var a = expr.substring(inicio+1, entre);
 			var b = expr.substring(entre+1, fin);
 			
@@ -120,9 +125,12 @@ function evaluateTextMessage(senderID, messageText){
 
 			SendTextMessage(senderID, ("Resultado de la resta es: "+ result));
 		break;
-		case "divicion":
+		case "division":
 			var entre = expr.lastIndexOf('/');
 			console.log('entre', entre);
+
+			var fin = expr.length;
+			console.log('fin', fin);
 
 			var a = expr.substring(inicio+1, entre);
 			var b = expr.substring(entre+1, fin);
@@ -133,11 +141,14 @@ function evaluateTextMessage(senderID, messageText){
 			var vb = parseInt(b);
 			var result = va/vb;
 
-			SendTextMessage(senderID, ("Resultado de la divición es: "+ result));
+			SendTextMessage(senderID, ("Resultado de la división es: "+ result));
 		break;
 		case "multiplicacion":
 			var entre = expr.lastIndexOf('*');
 			console.log('entre', entre);
+
+			var fin = expr.length;
+			console.log('fin', fin);
 
 			var a = expr.substring(inicio+1, entre);
 			var b = expr.substring(entre+1, fin);
@@ -189,15 +200,53 @@ function callSendApi(messageData){
 }
 
 function toLowerCase(expr){
-
+	var tocase = expr.toLowerCase();
+	console.log(tocase);
+	return tocase;
 }
 
 function remplaceSpace(expr){
-
+	var cleanText = expr.replace(/\s/g,"");
+	console.log(cleanText);
+	return cleanText;
 }
 
+function operation(expr){
+	var inicio = expr.lastIndexOf('=');
+	console.log('inicio', inicio);
+
+	var operacion = expr.substring(0, inicio);
+	console.log('operacion:', operacion);
+
+	return operacion;
+}
 
 function evaluateOperation(expr, signo){
+	var result = 0;
+
+	var entre = expr.lastIndexOf(signo);
+	console.log('entre', entre);
+
+	var fin = expr.length;
+	console.log('fin', fin);
+
+	var a = expr.substring(inicio+1, entre);
+	var b = expr.substring(entre+1, fin);
+	
+	console.log(a,b);
+	
+	var va = parseInt(a);
+	var vb = parseInt(b);
+
+	switch (signo) {
+		case "+":
+			var result = va+vb;
+		break;
+	}
+
+	console.log(result);
+
+	return result;
 	
 }
 
