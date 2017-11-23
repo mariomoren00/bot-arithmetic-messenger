@@ -76,30 +76,18 @@ function evaluateTextMessage(senderID, messageText){
 	var tocase = expr.toLowerCase();
 	console.log(tocase);
 
-	//quitar espacios entre palabras
-	//var texto = "migate no gokui";
-	//var textof = texto.replace(/\s/g,"");
-	//console.log(textof);
-
 	var cleanText = tocase.replace(/\s/g,"");
 	console.log(cleanText);
 
 	var inicio = expr.lastIndexOf('=');
 	console.log('inicio', inicio);
-	
-	//var entre = expr.lastIndexOf('+');
-	//console.log('entre', entre);
 
 	var fin = expr.length;
 	console.log('fin', fin);
 
-	//var a = expr.substring(inicio+1, entre);
-	//var b = expr.substring(entre+1, fin);
-
 	var operacion = expr.substring(0, inicio);
 	console.log('operacion:', operacion);
 
-	//console.log(a,b);
 	
 	switch (operacion) {
 		case "suma":
@@ -177,7 +165,6 @@ function SendTextMessage(senderID, message){
 			text: message
 		}
 	}
-
 	callSendApi(messageData)
 }
 
@@ -201,35 +188,17 @@ function callSendApi(messageData){
 	})
 }
 
-function evaluateOpetarion(expr, signo){
+function toLowerCase(expr){
+
+}
+
+function remplaceSpace(expr){
+
+}
+
+
+function evaluateOperation(expr, signo){
 	
 }
 
 
-/**
- * 
- * function esMayuscula(letra)
-{
-    return letra === letra.toUpperCase();
-}
-
-function esMinuscula(letra)
-{
-    return letra === letra.toLowerCase();
-}   
-
-var miPalabra = "Suma=5+5";
-for(var index = 0; index < miPalabra.length; index++)
-{
-    var letraActual = miPalabra.charAt(index);
-    if(esMayuscula(letraActual))
-    {
-        alert("La letra " + letraActual + " es mayúscula");
-    }
-
-    if(esMinuscula(letraActual))
-    {
-        alert("La letra " + letraActual + " es minúscula");
-    }       
-}
- */
