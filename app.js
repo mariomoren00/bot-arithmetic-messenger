@@ -6,7 +6,7 @@ const request = require('request')
 const fs = require('fs')
 
 // Declare token facebook
-const APP_TOKEN = 'EAAEvc9HEf8kBAD7Aw9guZA80cP2YhzRNsT4ZAOH9asaHLngQzdlFEZB8M8WgwDP1QXvfNXqcUNtzyjcQ4vMOT2fKW2a6sX5nwuBh3LZCVSZAxSZAAmPn0WAU8RaLAREAABDqToqTbMeXFSqgMYjPEHVhI58G3vqOk566C99JcKZAhB5PY99dxFg';
+const APP_TOKEN = 'EAAEvc9HEf8kBAJ3zj6dgKmiZAZCfgzfUwFzExGnnRIQeyMMcdtgV44CuIx9e4qAWcQnuGaz6Lf9gCOya4JnqROp0uLIgaH4G2f4VOpsDQwUNRGL0qikSeXUS2KZBhZCa1JNaWx5jD2d0fPQxnVkGRVYcniMdu3yDBqLva1r2ZC1YLbiGHMpZBj';
 
 var app = express()
 
@@ -17,7 +17,7 @@ const folderPath = __dirname + '/app'
 app.use(bodyParser.json())
 
 // Declare port 
-var PORT = process.env.PORT || 4000;
+var PORT = process.env.PORT || 3000;
 
 // Mount your static paths
 // Renders your image, title, paragraph and index.html
@@ -71,94 +71,55 @@ function getMessage(messagingEvent){
 // Evaluate text message
 function evaluateTextMessage(senderID, messageText){
 	var expr = messageText;
+	console.log(expr);
 	
 	//convertir minusculas
-	var tocase = expr.toLowerCase();
-	console.log(tocase);
+	expr = toLowerCase(expr);
+	//expr = expr.toLowerCase();
+	console.log(expr);
 
 	//quitar espacios en blanco
-	var cleanText = tocase.replace(/\s/g,"");
-	console.log(cleanText);
+	expr = remplaceSpace(expr);
+	//expr = expr.replace(/\s/g,"");
+	console.log(expr);
 
 	//evaluamos la operacion a realizar
-	var inicio = expr.lastIndexOf('=');
-	console.log('inicio', inicio);
+	//var inicio = expr.lastIndexOf('=');
+	//console.log('inicio', inicio);
 
-	var operacion = expr.substring(0, inicio);
-	console.log('operacion:', operacion);
-
+	//var operation = expr.substring(0, inicio);
+	let operation = getOperation(expr);	
+	console.log('operation:', operation);
+	let result = 0;
 	
-	switch (operacion) {
+	switch (operation) {
 		case "suma":
-			var entre = expr.lastIndexOf('+');
-			console.log('entre', entre);
+			console.log('Operación es suma');
 
-			var fin = expr.length;
-			console.log('fin', fin);
-
-			var a = expr.substring(inicio+1, entre);
-			var b = expr.substring(entre+1, fin);
-			
-			console.log(a,b);
-			
-			var va = parseInt(a);
-			var vb = parseInt(b);
-			var result = va+vb;
+			result = evaluateOperation(expr, '+');
 
 			SendTextMessage(senderID, ("Resultado de la suma es: "+ result));
 		break;
 		case "resta":
-			var entre = expr.lastIndexOf('-');
-			console.log('entre', entre);
-
-			var fin = expr.length;
-			console.log('fin', fin);
-
-			var a = expr.substring(inicio+1, entre);
-			var b = expr.substring(entre+1, fin);
+		
+			console.log('Operación es resta');
+		
+			result = evaluateOperation(expr, '-');
 			
-			console.log(a,b);
-			
-			var va = parseInt(a);
-			var vb = parseInt(b);
-			var result = va-vb;
-
 			SendTextMessage(senderID, ("Resultado de la resta es: "+ result));
 		break;
 		case "division":
-			var entre = expr.lastIndexOf('/');
-			console.log('entre', entre);
-
-			var fin = expr.length;
-			console.log('fin', fin);
-
-			var a = expr.substring(inicio+1, entre);
-			var b = expr.substring(entre+1, fin);
+			console.log('Operación es división');
 			
-			console.log(a,b);
-			
-			var va = parseInt(a);
-			var vb = parseInt(b);
-			var result = va/vb;
+			 result = evaluateOperation(expr, '/');
 
 			SendTextMessage(senderID, ("Resultado de la división es: "+ result));
 		break;
 		case "multiplicacion":
-			var entre = expr.lastIndexOf('*');
-			console.log('entre', entre);
+			console.log('Operación es multiplicación');
 
-			var fin = expr.length;
-			console.log('fin', fin);
-
-			var a = expr.substring(inicio+1, entre);
-			var b = expr.substring(entre+1, fin);
+			 result = evaluateOperation(expr, '*');
 			
-			console.log(a,b);
-			
-			var va = parseInt(a);
-			var vb = parseInt(b);
-			var result = va*vb;
-
 			SendTextMessage(senderID, ("Resultado de la multiplicación es: "+ result));
 		break;
 		default:
@@ -200,18 +161,18 @@ function callSendApi(messageData){
 }
 
 function toLowerCase(expr){
-	var tocase = expr.toLowerCase();
-	console.log(tocase);
-	return tocase;
+	let word = expr.toLowerCase();
+	console.log(word);
+	return word;
 }
 
 function remplaceSpace(expr){
-	var cleanText = expr.replace(/\s/g,"");
-	console.log(cleanText);
-	return cleanText;
+	let word = expr.replace(/\s/g,"");
+	console.log(word);
+	return word;
 }
 
-function operation(expr){
+function getOperation(expr){
 	var inicio = expr.lastIndexOf('=');
 	console.log('inicio', inicio);
 
@@ -222,7 +183,10 @@ function operation(expr){
 }
 
 function evaluateOperation(expr, signo){
-	var result = 0;
+	let response = 0;
+
+	var inicio = expr.lastIndexOf('=');
+	console.log('inicio', inicio);
 
 	var entre = expr.lastIndexOf(signo);
 	console.log('entre', entre);
@@ -240,13 +204,22 @@ function evaluateOperation(expr, signo){
 
 	switch (signo) {
 		case "+":
-			var result = va+vb;
+			response = va + vb;
+		break;
+		case "-":
+			response = va - vb;
+		break;
+		case "*":
+			response = va * vb;
+		break;
+		case "/":
+			response = va / vb;
 		break;
 	}
 
-	console.log(result);
+	console.log(response);
 
-	return result;
+	return response;
 	
 }
 
