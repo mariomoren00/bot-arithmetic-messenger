@@ -70,56 +70,35 @@ function getMessage(messagingEvent){
 
 // Evaluate text message
 function evaluateTextMessage(senderID, messageText){
-	var expr = messageText;
+	let operation = "";
+	let result = 0;	
+	let expr = messageText;
+
 	console.log(expr);
 	
 	//convertir minusculas
 	expr = toLowerCase(expr);
-	//expr = expr.toLowerCase();
-	console.log(expr);
 
 	//quitar espacios en blanco
 	expr = remplaceSpace(expr);
-	//expr = expr.replace(/\s/g,"");
-	console.log(expr);
 
-	//evaluamos la operacion a realizar
-	//var inicio = expr.lastIndexOf('=');
-	//console.log('inicio', inicio);
-
-	//var operation = expr.substring(0, inicio);
-	let operation = getOperation(expr);	
-	console.log('operation:', operation);
-	let result = 0;
-	
+	operation = getOperation(expr);	
+		
 	switch (operation) {
 		case "suma":
-			console.log('Operación es suma');
-
 			result = evaluateOperation(expr, '+');
-
 			SendTextMessage(senderID, ("Resultado de la suma es: "+ result));
 		break;
 		case "resta":
-		
-			console.log('Operación es resta');
-		
 			result = evaluateOperation(expr, '-');
-			
 			SendTextMessage(senderID, ("Resultado de la resta es: "+ result));
 		break;
 		case "division":
-			console.log('Operación es división');
-			
-			 result = evaluateOperation(expr, '/');
-
+			result = evaluateOperation(expr, '/');
 			SendTextMessage(senderID, ("Resultado de la división es: "+ result));
 		break;
 		case "multiplicacion":
-			console.log('Operación es multiplicación');
-
-			 result = evaluateOperation(expr, '*');
-			
+			result = evaluateOperation(expr, '*');
 			SendTextMessage(senderID, ("Resultado de la multiplicación es: "+ result));
 		break;
 		default:
@@ -173,53 +152,53 @@ function remplaceSpace(expr){
 }
 
 function getOperation(expr){
-	var inicio = expr.lastIndexOf('=');
+	let inicio = expr.lastIndexOf('=');
 	console.log('inicio', inicio);
 
-	var operacion = expr.substring(0, inicio);
-	console.log('operacion:', operacion);
+	let operation = expr.substring(0, inicio);
+	console.log('operation:', operation);
 
-	return operacion;
+	return operation;
 }
 
 function evaluateOperation(expr, signo){
-	let response = 0;
+	let result = 0;
 
-	var inicio = expr.lastIndexOf('=');
+	let inicio = expr.lastIndexOf('=');
 	console.log('inicio', inicio);
 
-	var entre = expr.lastIndexOf(signo);
+	let entre = expr.lastIndexOf(signo);
 	console.log('entre', entre);
 
-	var fin = expr.length;
+	let fin = expr.length;
 	console.log('fin', fin);
 
-	var a = expr.substring(inicio+1, entre);
-	var b = expr.substring(entre+1, fin);
+	let a = expr.substring(inicio+1, entre);
+	let b = expr.substring(entre+1, fin);
 	
 	console.log(a,b);
 	
-	var va = parseInt(a);
-	var vb = parseInt(b);
+	a = parseInt(a);
+	b = parseInt(b);
 
 	switch (signo) {
 		case "+":
-			response = va + vb;
+			result = a + b;
 		break;
 		case "-":
-			response = va - vb;
+			result = a - b;
 		break;
 		case "*":
-			response = va * vb;
+			result = a * b;
 		break;
 		case "/":
-			response = va / vb;
+			result = a / b;
 		break;
 	}
 
-	console.log(response);
+	console.log(result);
 
-	return response;
+	return result;
 	
 }
 
