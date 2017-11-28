@@ -76,12 +76,10 @@ function evaluateTextMessage(senderID, messageText){
 
 	console.log(expr);
 	
-	//convertir minusculas
-	expr = toLowerCase(expr);
+	//convertir minusculas y quitar espacios en blanco
+	expr = expressionWord(expr);
 
-	//quitar espacios en blanco
-	expr = remplaceSpace(expr);
-
+	//obtener el tipo de operación a resolver
 	operation = getOperation(expr);	
 		
 	switch (operation) {
@@ -139,14 +137,8 @@ function callSendApi(messageData){
 	})
 }
 
-function toLowerCase(expr){
-	let word = expr.toLowerCase();
-	console.log(word);
-	return word;
-}
-
-function remplaceSpace(expr){
-	let word = expr.replace(/\s/g,"");
+function expressionWord(expr){
+	let word = expr.toLowerCase().replace(/\s/g, '');
 	console.log(word);
 	return word;
 }
