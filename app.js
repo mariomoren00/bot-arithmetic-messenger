@@ -17,7 +17,7 @@ const folderPath = __dirname + '/app'
 app.use(bodyParser.json())
 
 // Declare port 
-var PORT = 3000;
+var PORT = '3000';
 
 // Mount your static paths
 // Renders your image, title, paragraph and index.html
