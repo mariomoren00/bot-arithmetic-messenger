@@ -52,7 +52,7 @@ app.post('/webhook',function(req, res){
 		data.entry.forEach(function(pageEntry){
 			pageEntry.messaging.forEach(function(event){
 				if(event.message){
-					console.log("Webhook received unknown event: ", event);					
+					console.log("Webhook received");					
 					getMessage(event)
 				}
 			})
@@ -76,31 +76,31 @@ function evaluateTextMessage(senderID, messageText){
 
 	console.log(expr);
 	
-	//convertir minusculas y quitar espacios en blanco
+	//turn lowercase and remove blanks
 	expr = expressionWord(expr);
 
-	//obtener el tipo de operación a resolver
+	//get the type of operation to solve
 	operation = getOperation(expr);	
 		
 	switch (operation) {
 		case "suma":
 			result = evaluateOperation(expr, '+');
-			SendTextMessage(senderID, ("Resultado de la suma es: "+ result));
+			SendTextMessage(senderID, ("The result is: "+ result));
 		break;
 		case "resta":
 			result = evaluateOperation(expr, '-');
-			SendTextMessage(senderID, ("Resultado de la resta es: "+ result));
+			SendTextMessage(senderID, ("The result is: "+ result));
 		break;
 		case "division":
 			result = evaluateOperation(expr, '/');
-			SendTextMessage(senderID, ("Resultado de la división es: "+ result));
+			SendTextMessage(senderID, ("The result is: "+ result));
 		break;
 		case "multiplicacion":
 			result = evaluateOperation(expr, '*');
-			SendTextMessage(senderID, ("Resultado de la multiplicación es: "+ result));
+			SendTextMessage(senderID, ("The result is: "+ result));
 		break;
 		default:
-			SendTextMessage(senderID, "No puedo ayudarte con esa operación :( ");
+			SendTextMessage(senderID, "I can not help you with that operation :( ");
 	}	
 }
 
@@ -128,52 +128,52 @@ function callSendApi(messageData){
 		if (!error && response.statusCode == 200) {
 			var recipientId = body.recipient_id;
 			var messageId = body.message_id;
-			console.log("Successfully sent generic message with id %s to recipient %s", messageId, recipientId);
+			console.log("Successfully sent generic message");
 		} else {
 			console.error("Unable to send message.");
-			console.error(response);
 			console.error(error);
 		}
 	})
 }
 
+// Turn lowercase and remove blanks
 function expressionWord(expr){
 	let word = expr.toLowerCase().replace(/\s/g, '');
 	console.log(word);
 	return word;
 }
 
+// Get the type of operation to solve
 function getOperation(expr){
-	let inicio = expr.lastIndexOf('=');
-	console.log('inicio', inicio);
+	let start = expr.lastIndexOf('=');
+	console.log('start', start);
 
-	let operation = expr.substring(0, inicio);
+	let operation = expr.substring(0, start);
 	console.log('operation:', operation);
 
 	return operation;
 }
 
-function evaluateOperation(expr, signo){
+//
+function evaluateOperation(expr, sign){
 	let result = 0;
 
-	let inicio = expr.lastIndexOf('=');
-	console.log('inicio', inicio);
+	let start = expr.lastIndexOf('=');
+	console.log('start', start);
 
-	let entre = expr.lastIndexOf(signo);
-	console.log('entre', entre);
+	let between = expr.lastIndexOf(sign);
+	console.log('between', between);
 
-	let fin = expr.length;
-	console.log('fin', fin);
+	let end = expr.length;
+	console.log('end', end);
 
-	let a = expr.substring(inicio+1, entre);
-	let b = expr.substring(entre+1, fin);
-	
-	console.log(a,b);
-	
-	a = parseInt(a);
-	b = parseInt(b);
+	let a = parseInt(expr.substring(start+1, between));
+	let b = parseInt(expr.substring(between+1, end));
+		
+	//a = parseInt(a);
+	//b = parseInt(b);
 
-	switch (signo) {
+	switch (sign) {
 		case "+":
 			result = a + b;
 		break;
