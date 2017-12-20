@@ -138,7 +138,8 @@ function callSendApi(messageData){
 
 // Turn lowercase and remove blanks
 function expressionWord(expr){
-	let word = expr.toLowerCase().replace(/\s/g, '');
+	let word = expr.toLowerCase();
+	word = word.replace(/\s/g, '');
 	console.log(word);
 	return word;
 }
