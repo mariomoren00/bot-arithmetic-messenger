@@ -52,7 +52,8 @@ app.post('/webhook',function(req, res){
 		data.entry.forEach(function(pageEntry){
 			pageEntry.messaging.forEach(function(event){
 				if(event.message){
-					console.log("Webhook received");					
+					console.log("Webhook received");	
+					console.log(event);				
 					getMessage(event)
 				}
 			})
@@ -109,6 +110,7 @@ function evaluateTextMessage(senderID, messageText){
 // Send text message
 function SendTextMessage(senderID, message){
 	var messageData = {
+		messaging_type: "RESPONSE",		
 		recipient : {
 			id: senderID
 		},
