@@ -79,6 +79,8 @@ function evaluateTextMessage(senderID, messageText){
 	//turn lowercase and remove blanks
 	expr = expressionWord(expr);
 
+	console.log(expr);
+	
 	//get the type of operation to solve
 	operation = getOperation(expr);	
 		
