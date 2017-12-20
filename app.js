@@ -53,9 +53,8 @@ app.post('/webhook',function(req, res){
 			pageEntry.messaging.forEach(function(event){
 				if(event.message){
 					console.log("Webhook received");	
-					console.log(event);	
-					console.log(event.message.attachments);				
-					
+					//console.log(event);	
+					//console.log(event.message.attachments);				
 					getMessage(event)
 				}
 			})
@@ -145,7 +144,7 @@ function callSendApi(messageData){
 // Turn lowercase and remove blanks
 function expressionWord(expr){
 	console.log(expr);
-	let word = expr.toLowerCase();
+	var word = expr.toLowerCase();
 	word = word.replace(/\s/g, '');
 	console.log(word);
 	return word;
