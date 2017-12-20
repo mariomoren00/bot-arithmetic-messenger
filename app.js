@@ -53,7 +53,9 @@ app.post('/webhook',function(req, res){
 			pageEntry.messaging.forEach(function(event){
 				if(event.message){
 					console.log("Webhook received");	
-					console.log(event);				
+					console.log(event);	
+					console.log(event.message.attachments);				
+					
 					getMessage(event)
 				}
 			})
