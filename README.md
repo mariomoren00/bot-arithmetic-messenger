@@ -1,2 +1,3 @@
-# bot-arithmetic-messenger
+# Bot Arithmetic Messenger
+
 Practice solving arithmetic sequences. 
